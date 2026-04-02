@@ -7,13 +7,42 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 ```
 
-```{r setup}
+## Introduction
+
+sePCA makes it easy to run PCA on RNA-seq data stored in SummarizedExperiment objects.
+
+## Quick Example
+
+```{r example}
 library(sePCA)
+
+# Load example data
+data(example_se)
+example_se
+
+# Run PCA
+result <- run_pca(example_se, n_top = 50)
+
+# Plot
+plot_pca(result, color_by = "treatment")
+```
+
+## Using Real Data
+
+```{r airway}
+library(airway)
+data(airway)
+
+# Run PCA on airway data
+result <- run_pca(airway, n_top = 500)
+
+# Visualize treatment effect
+plot_pca(result, color_by = "dex", shape_by = "cell")
 ```

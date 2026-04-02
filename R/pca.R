@@ -41,6 +41,8 @@
 #'   \code{\link[SummarizedExperiment]{colData}},
 #'   \code{\link[stats]{prcomp}}
 #'
+#' @importFrom SummarizedExperiment assay colData
+#' @importFrom stats prcomp
 #' @examples
 #' # Using the example SummarizedExperiment:
 #' # data(example_se)
@@ -52,7 +54,7 @@
 run_pca <- function(se, assay_name = "counts", n_top = 500, 
                     scale = TRUE, log_transform = TRUE) {
     se_top <- top_variable_features(se, n = n_top, assay_name = assay_name)
-    mat <- assay(se_top, assay_name)
+    mat <- SummarizedExperiment::assay(se_top, assay_name)
     if (log_transform) mat <- log2(mat + 1)
     mat_t <- t(mat)
     pca_result <- prcomp(mat_t, scale. = scale, center = TRUE)
@@ -108,7 +110,7 @@ pca_variance_explained <- function(pca_result) {
 #'   components to plot on x and y axes (default: \code{c(1, 2)}).
 #' @param point_size A \code{numeric} scalar giving point size in ggplot units
 #'   (default: \code{4}).
-#'
+#' @importFrom ggplot2 ggplot aes geom_point theme_minimal labs .data
 #' @return A \code{ggplot} object.
 #'
 #' @examples
@@ -133,51 +135,4 @@ plot_pca <- function(pca_result, color_by = NULL, shape_by = NULL,
     if (!is.null(color_by)) p <- p + aes(color = .data[[color_by]])
     if (!is.null(shape_by)) p <- p + aes(shape = .data[[shape_by]])
     p + geom_point(size = point_size)
-}
-#' Save PCA results to files
-#'
-#' Exports PCA scores, variance explained, and optionally a plot to TSV and PNG
-#' files in the specified output directory.
-#'
-#' @param pca_result A list containing PCA scores and prcomp object,
-#'   as returned by \code{\link{run_pca}}.
-#' @param output_dir A \code{character} scalar giving the output directory path.
-#' @param color_by A \code{character} scalar naming a column in
-#'   \code{pca_result$scores} to color the plot by. If \code{NULL}, no plot
-#'   is saved.
-#'
-#' @details
-#' Creates the output directory if it does not exist. Saves:
-#' \describe{
-#'   \item{\code{pca_scores.tsv}}{PCA scores merged with sample metadata}
-#'   \item{\code{pca_variance.tsv}}{Variance explained by each PC}
-#'   \item{\code{pca_plot.png}}{PCA scatter plot (only if \code{color_by}
-#'     is specified)}
-#' }
-#'
-#' @return \code{invisible(NULL)}, called for side effects.
-#'
-#' @examples
-#' # res <- run_pca(example_se)
-#' # save_pca_results(res, "pca_output", color_by = "treatment")
-#'
-#' @export
-save_pca_results <- function(pca_result, output_dir, color_by = NULL) {
-    if (!is.character(output_dir) || length(output_dir) != 1) {
-        stop("output_dir must be a single directory path")
-    }
-    if (!dir.exists(output_dir)) dir.create(output_dir, recursive = TRUE)
-    scores_file <- file.path(output_dir, "pca_scores.tsv")
-    write.table(pca_result$scores, scores_file, sep = "\t",
-                row.names = FALSE, quote = FALSE)
-    var_df <- pca_variance_explained(pca_result)
-    var_file <- file.path(output_dir, "pca_variance.tsv")
-    write.table(var_df, var_file, sep = "\t",
-                row.names = FALSE, quote = FALSE)
-    if (!is.null(color_by)) {
-        plot_file <- file.path(output_dir, "pca_plot.png")
-        p <- plot_pca(pca_result, color_by = color_by)
-        ggplot2::ggsave(plot_file, p, width = 8, height = 6, dpi = 150)
-    }
-    invisible(NULL)
 }
