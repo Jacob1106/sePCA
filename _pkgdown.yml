@@ -1,0 +1,32 @@
+url: https://Jacob1106.github.io/sePCA/
+
+template:
+  bootstrap: 5
+  bootswatch: flatly
+
+navbar:
+  structure:
+    left:  [intro, reference, articles]
+    right: [search, github]
+
+reference:
+  - title: "Data Handling"
+    desc: "Create and manipulate SummarizedExperiment objects"
+    contents:
+      - top_variable_features
+  
+  - title: "PCA Analysis"
+    desc: "Run and analyze PCA"
+    contents:
+      - run_pca
+      - pca_variance_explained
+  
+  - title: "Visualization"
+    desc: "Create plots"
+    contents:
+      - plot_pca
+
+articles:
+  - title: "Getting Started"
+    contents:
+      - getting-started
