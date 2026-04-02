@@ -13,6 +13,9 @@ BugReports: https://github.com/Jacob1106/sePCA/issues
 Imports: 
     ggplot2,
     rlang,
+    shiny,
+    bslib,
+    airway,
     SummarizedExperiment
 Suggests: 
     knitr,
