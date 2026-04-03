@@ -11,7 +11,8 @@ top_variable_features(se, n = 500, assay_name = "counts")
 
 \item{n}{Number of top variable features to select (default: 500)}
 
-\item{assay_name}{Name of assay to use (default: "counts")}
+\item{assay_name}{Name of assay to use (default: "counts")
+s}
 }
 \value{
 A SummarizedExperiment subset to the top n variable features

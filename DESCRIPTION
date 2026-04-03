@@ -17,7 +17,9 @@ Imports:
     bslib,
     airway,
     SummarizedExperiment,
-    Rapp
+    Rapp,
+    utils,
+    stats
 Suggests: 
     DT,
     knitr,

@@ -3,15 +3,19 @@
 #| title: sePCA CLI
 #| description: PCA analysis for SummarizedExperiment data.
 
-suppressPackageStartupMessages(library(sePCA))
+suppressPackageStartupMessages({
+    library(sePCA)
+    library(utils)
+    library(stats)
+})
 
 # Helper to read TSV/CSV
 read_data_file <- function(path) {
     ext <- tolower(tools::file_ext(path))
     if (ext == "csv") {
-        utils::read.csv(path, row.names = 1, check.names = FALSE)
+        read.csv(path, row.names = 1, check.names = FALSE)
     } else {
-        utils::read.table(path, sep = "\t", header = TRUE, row.names = 1, check.names = FALSE)
+        read.table(path, sep = "\t", header = TRUE, row.names = 1, check.names = FALSE)
     }
 }
 
