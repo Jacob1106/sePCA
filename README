@@ -1,0 +1,34 @@
+## Command Line Interface
+
+sePCA includes a command-line interface for pipeline integration.
+
+### Quick Start
+
+```bash
+# Install the launcher (one-time)
+Rscript -e "Rapp::install_pkg_cli_apps('sePCA')"
+
+# Run PCA analysis
+sePCA pca \
+    --counts counts.tsv \
+    --meta samples.tsv \
+    --output results/ \
+    --n-top 500 \
+    --color-by treatment
+```
+
+### Fallback (No Launcher)
+
+```bash
+Rapp exec/sePCA pca --help
+```
+
+### Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `pca` | Run PCA analysis and export results |
+| `validate` | Validate input files |
+
+Run `sePCA <command> --help` for detailed options.
+

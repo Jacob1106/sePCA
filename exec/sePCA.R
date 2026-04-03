@@ -9,9 +9,9 @@ suppressPackageStartupMessages(library(sePCA))
 read_data_file <- function(path) {
     ext <- tolower(tools::file_ext(path))
     if (ext == "csv") {
-        read.csv(path, row.names = 1, check.names = FALSE)
+        utils::read.csv(path, row.names = 1, check.names = FALSE)
     } else {
-        read.table(path, sep = "\t", header = TRUE, row.names = 1, check.names = FALSE)
+        utils::read.table(path, sep = "\t", header = TRUE, row.names = 1, check.names = FALSE)
     }
 }
 

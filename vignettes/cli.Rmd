@@ -1,0 +1,105 @@
+---
+title: "Command Line Interface"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Command Line Interface}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Overview
+
+The sePCA CLI allows you to run PCA analysis from the command line,
+making it easy to integrate into pipelines.
+
+## Installation
+
+After installing sePCA, install the CLI launcher:
+
+```r
+remotes::install_github("you/sePCA")
+Rapp::install_pkg_cli_apps("sePCA")
+```
+
+## Usage
+
+### Basic PCA Analysis
+
+```bash
+sePCA pca \
+    --counts counts.tsv \
+    --meta samples.tsv \
+    --output results/
+```
+
+### Input File Formats
+
+**Counts matrix** (`--counts`):
+- Tab-separated or comma-separated
+- First column: gene IDs (row names)
+- Subsequent columns: sample counts
+- Header row with sample IDs
+
+```
+gene_id    sample1    sample2    sample3
+ENSG001    100        150        120
+ENSG002    50         75         60
+```
+
+**Metadata** (`--meta`):
+- Tab-separated or comma-separated
+- First column: sample IDs (must match counts columns)
+- Additional columns: sample attributes
+
+```
+sample_id    treatment    batch
+sample1      control      A
+sample2      treated      A
+sample3      treated      B
+```
+
+### Output Files
+
+| File | Description |
+|------|-------------|
+| `pca_scores.tsv` | PCA scores merged with sample metadata |
+| `pca_variance.tsv` | Variance explained by each PC |
+| `pca_plot.png` | PCA scatter plot (if `--color-by` specified) |
+
+### Full Options
+
+```
+sePCA pca --help
+```
+
+## Pipeline Integration
+
+### Snakemake
+
+```python
+rule pca:
+    input:
+        counts = "data/{sample}/counts.tsv",
+        meta = "data/{sample}/meta.tsv"
+    output:
+        directory("results/{sample}/pca/")
+    shell:
+        """
+        sePCA pca \
+            --counts {input.counts} \
+            --meta {input.meta} \
+            --output {output}
+        """
+```
+
+### Bash Loop
+
+```bash
+for dataset in data/*; do
+    name=$(basename "$dataset")
+    sePCA pca \
+        --counts "$dataset/counts.tsv" \
+        --meta "$dataset/meta.tsv" \
+        --output "results/$name/"
+done
+```
