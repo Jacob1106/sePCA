@@ -16,8 +16,10 @@ Imports:
     shiny,
     bslib,
     airway,
-    SummarizedExperiment
+    SummarizedExperiment,
+    Rapp
 Suggests: 
+    DT,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
